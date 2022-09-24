@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.MemoryMappedFiles;
 
-namespace ml_tds
+namespace ml_tdp
 {
     class MemoryMapWritter
     {

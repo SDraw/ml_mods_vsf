@@ -1,4 +1,4 @@
-﻿namespace ml_tds
+﻿namespace ml_tdp
 {
     public class TrackingDataParser : MelonLoader.MelonMod
     {
