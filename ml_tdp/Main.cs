@@ -1,4 +1,6 @@
-﻿namespace ml_tdp
+﻿using OpenSee;
+
+namespace ml_tdp
 {
     public class TrackingDataParser : MelonLoader.MelonMod
     {
@@ -8,8 +10,9 @@
         TrackingData m_trackingData;
         UnityEngine.GameObject m_trackingTarget = null;
         OpenSeeVRMDriver m_vrmDriver = null;
+        OpenSeeIKTarget m_ikTarget = null;
 
-        public override void OnApplicationStart()
+        public override void OnInitializeMelon()
         {
             m_mapWritter = new MemoryMapWritter();
             m_mapWritter.Open("head/data");
@@ -27,9 +30,10 @@
             }
 
             m_vrmDriver = m_trackingTarget.GetComponent<OpenSeeVRMDriver>();
+            m_ikTarget = m_vrmDriver.openSeeIKTarget;
         }
 
-        public override void OnApplicationQuit()
+        public override void OnDeinitializeMelon()
         {
             if(!m_quit)
             {
@@ -51,7 +55,7 @@
                 m_trackingData.m_headRotationY = m_trackingTarget.transform.rotation.y;
                 m_trackingData.m_headRotationZ = m_trackingTarget.transform.rotation.z;
                 m_trackingData.m_headRotationW = m_trackingTarget.transform.rotation.w;
-                m_trackingData.m_gazeX = m_vrmDriver.vrcGaze.x;
+                m_trackingData.m_gazeX = (m_ikTarget.mirrorMotion ? (1f - m_vrmDriver.vrcGaze.x) : m_vrmDriver.vrcGaze.x);
                 m_trackingData.m_gazeY = m_vrmDriver.vrcGaze.y;
                 m_trackingData.m_blink = m_vrmDriver.vrcBlink;
                 m_trackingData.m_mouthOpen = m_vrmDriver.vrcMouth.x;
